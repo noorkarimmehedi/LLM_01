@@ -8,10 +8,12 @@ const nextConfig = {
             { hostname: 'img.clerk.com' },
             { hostname: 'zyqdiwxgffuy8ymd.public.blob.vercel-storage.com' },
         ],
+        unoptimized: process.env.NODE_ENV === 'development',
     },
-
     experimental: {
         externalDir: true,
+        optimizeCss: true,
+        optimizePackageImports: ['@phosphor-icons/react', 'lucide-react'],
     },
     webpack: (config, options) => {
         if (!options.isServer) {
@@ -45,10 +47,15 @@ const nextConfig = {
     async redirects() {
         return [{ source: '/', destination: '/chat', permanent: true }];
     },
+    // Add production optimizations
+    poweredByHeader: false,
+    compress: true,
+    reactStrictMode: true,
+    swcMinify: true,
 };
 
 export default withSentryConfig(nextConfig, {
-    // Sentry configuration (unchanged)
+    // Sentry configuration
     org: 'saascollect',
     project: 'javascript-nextjs',
     silent: !process.env.CI,
